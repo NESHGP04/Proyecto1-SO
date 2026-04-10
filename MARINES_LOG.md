@@ -1,4 +1,6 @@
- implementaste, qué decisiones tomaste y qué falta
+Lo que implementé, qué decisiones tomé y qué falta
+
+# 10/04/2026
 
 ### 1. protocol.h
 Creación base de este archivo, CAMI debe modificarlo después
