@@ -19,3 +19,21 @@ ParsedCommand — separa el parsing de la lógica de envío. parse_command() con
 recv_line() — función clave. Lee byte a byte hasta \n. Sin esto, el receiver podría leer medio mensaje o dos mensajes juntos en el mismo buffer.
 
 ui_* — todas las funciones de impresión están aisladas en ui.c. Si quieren cambiar colores o formato para la demo, tocás un solo archivo.
+
+### 3. stub_server.c
+WELCOME|CHAT/1.0          ← lo primero que manda siempre
+REGISTER_OK|marines|127.0.0.1|ACTIVO   ← registro exitoso
+STATUS_OK|OCUPADO         ← cambio de status
+BYE                       ← QUIT limpio
+El test del duplicado no disparó el error porque el primer cliente ya había cerrado la conexión abruptamente (nc salió antes), así que el slot se liberó. Cuando el servidor real de Nery esté, ese caso sí va a funcionar con dos conexiones simultáneas reales.
+
+FALTA:
+compilar: 
+gcc -std=c11 -Wall -Wextra -Iinclude tests/stub_server.c -lpthread -o stub_server
+./stub_server 8080
+
+probar: 
+nc 127.0.0.1 8080
+- escribe: REGISTER|marines
+- escribe: STATUS|OCUPADO
+- escribe: QUIT
