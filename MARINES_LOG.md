@@ -39,3 +39,39 @@ nc 127.0.0.1 8080
 - escribe: REGISTER|marines
 - escribe: STATUS|OCUPADO
 - escribe: QUIT
+
+
+## 11/04/2026
+
+### 1.Main_client.c
+Conectando a 127.0.0.1:8080...
+Conexión establecida.
+  Usuario  : marines
+  IP propia: 127.0.0.1
+  Status   : ACTIVO
+  El handshake completo funciona: WELCOME → REGISTER → REGISTER_OK → banner.
+
+Test 2 — username inválido: rechazado localmente antes de tocar el socket, con mensaje claro.
+
+Test 3 — puerto 99999: rechazado con validación antes del connect().
+
+Test 4 — servidor inalcanzable: Connection refused con código de salida 1.
+
+validate_username() corre en el cliente antes de enviar nada — si el nombre es inválido, ni conectamos. validate_port() igual. Esto evita mensajes de error confusos que vendrían del servidor.
+El handshake está en client_register() separado de main() — cuando llegue la integración con Nery, si cambia algo del registro solo tocás esa función.
+MSG_NOSIGNAL en el send() del disconnect evita que el proceso muera con SIGPIPE si el servidor ya cerró la conexión antes de que mandemos el QUIT.
+
+### 2. receiver_loop.c
+TEST
+WELCOME|CHAT/1.0               ← handshake
+REGISTER_OK|marines|...|ACTIVO ← registro
+LIST_OK|marines                ← lista
+STATUS_OK|OCUPADO              ← cambio de status
+ERROR|MSG|USER_NOT_FOUND|...   ← error manejado
+BROADCAST_FROM|marines|...     ← broadcast entrante
+BROADCAST_OK                   ← confirmación
+BYE                            ← salida limpia
+
+parse_msg_fields() en vez de strtok para DELIVER y BROADCAST_FROM — si alguien manda el mensaje "hola|como|estas", strtok lo rompería en tres tokens. Esta función toma solo el primer | como separador y el resto va completo al campo mensaje.
+print_mutex alrededor de cada ui_* y ui_print_prompt() — sin esto, el receiver puede imprimir un mensaje entrante justo en medio de lo que el usuario está escribiendo, mezclando los caracteres. El mutex garantiza que primero termina de imprimir el mensaje y luego redibuja el prompt >.
+state->running = 0 al final del thread — cuando el receiver termina (por BYE, EOF o error), le avisa al input_loop poniendo el flag en 0. El input_loop lo chequea y también sale. Así los dos threads se coordinan sin señales ni pipes.
