@@ -6,7 +6,7 @@
 #define PROTOCOL_H
 
 #include "common.h"
-#include "protocol.h"
+//#include "protocol.h"
 
 typedef enum { //convierte los strings en algo que es manejable en C
     CMD_REGISTER,
