@@ -70,3 +70,50 @@ void handle_quit(int fd) {
     send(fd, buf, strlen(buf), 0);
     close(fd);
 }
+
+//obtiene los usuarios conectados, responde con LIST_OK|user1;user2
+void handle_list(int fd) {
+    char users[1024];
+    char buf[1024];
+
+    get_all_users(users, sizeof(users)); // "user1;user2;user3"
+    build_list_ok(buf, sizeof(buf), users);
+    send(fd, buf, strlen(buf), 0);
+}
+
+//verifica si el usuario existe, obtiene IP + estado y responde con INFO_OK
+void handle_info(int fd, parsed_message_t *msg) {
+    char buf[256];
+    char ip[64];
+    char status[32];
+
+    if (!username_exists(msg->arg1)) {
+        build_error(buf, sizeof(buf), "INFO", "NOT_FOUND", "Usuario no existe");
+        send(fd, buf, strlen(buf), 0);
+        return;
+    }
+
+    if (!get_user_info(msg->arg1, ip, status)) {
+        build_error(buf, sizeof(buf), "INFO", "ERROR", "No se pudo obtener info");
+        send(fd, buf, strlen(buf), 0);
+        return;
+    }
+
+    build_info_ok(buf, sizeof(buf), msg->arg1, ip, status);
+    send(fd, buf, strlen(buf), 0);
+}
+
+//valida estado (ACTIVO, OCUPADO, INACTIVO), actualiza en el sistema y responde STATUS_OK
+void handle_status(int fd, parsed_message_t *msg, const char *user) {
+    char buf[256];
+
+    if (!is_valid_status(msg->arg1)) {
+        build_error(buf, sizeof(buf), "STATUS", "INVALID", "Estado invalido");
+        send(fd, buf, strlen(buf), 0);
+        return;
+    }
+
+    set_user_status(user, msg->arg1);
+    build_status_ok(buf, sizeof(buf), msg->arg1);
+    send(fd, buf, strlen(buf), 0);
+}
