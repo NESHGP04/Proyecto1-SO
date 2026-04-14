@@ -1,7 +1,7 @@
 //src/common/protocol.c
 //Encapsula el parsing y la construcción de mensajes para cumplir estrictamente el protocolo
 
-#include "../../include/protocol.h"
+#include "../../include/parser.h"
 
 //convierte el mensaje en la estructura definida
 //Maneja escapes (\|, \n, \\)

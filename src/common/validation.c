@@ -3,7 +3,7 @@
 //Separa validación del parsing para evitar lógica duplicada en handlers
 
 #include "../../include/common.h"
-#include "../../include/protocol.h"
+#include "../../include/parser.h"
 
 int is_valid_username(const char *u) { //evalúa si el username es válido (solo letras, números y _, longitud válida)
     if (!u) return 0;

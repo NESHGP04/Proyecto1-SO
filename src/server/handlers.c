@@ -1,8 +1,9 @@
 //src/server/handlers.c
 //convierte mensajes en acciones reales
 
-#include "../../include/protocol.h"
+#include "../../include/parser.h"
 #include "../../include/common.h"
+#include "../../include/session.h"
 
 //flujo real del servidor: llega mensaje, se parsea, se valida y el handler ejecuta lógica
 
@@ -117,3 +118,51 @@ void handle_status(int fd, parsed_message_t *msg, const char *user) {
     build_status_ok(buf, sizeof(buf), msg->arg1);
     send(fd, buf, strlen(buf), 0);
 }
+
+int handle_parsed_message(client_session_t *session, const parsed_message_t *msg) {
+    if (!session || !msg) return -1;
+
+    int fd = session->fd;
+    const char *user = session->username;
+
+    switch (msg->type) {
+
+        case CMD_REGISTER:
+            handle_register(fd, (parsed_message_t*)msg);
+            break;
+
+        case CMD_LIST:
+            handle_list(fd);
+            break;
+
+        case CMD_INFO:
+            handle_info(fd, (parsed_message_t*)msg);
+            break;
+
+        case CMD_STATUS:
+            handle_status(fd, (parsed_message_t*)msg, user);
+            break;
+
+        case CMD_MSG:
+            handle_msg(fd, (parsed_message_t*)msg, user);
+            break;
+
+        case CMD_BROADCAST:
+            handle_broadcast(fd, (parsed_message_t*)msg, user);
+            break;
+
+        case CMD_QUIT:
+            handle_quit(fd);
+            return 1;
+
+        default: {
+            char buf[256];
+            build_error(buf, sizeof(buf), "UNKNOWN", "INVALID_CMD", "Comando invalido");
+            send(fd, buf, strlen(buf), 0);
+        }
+    }
+
+    return 0;
+}
+
+
