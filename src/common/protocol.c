@@ -49,6 +49,16 @@ int parse_message(const char *line, parsed_message_t *out) {
     return 0;
 }
 
+int protocol_parse(const char *line, parsed_message_t *out) {
+    if (parse_message(line, out) != 0)
+        return -1;
+
+    if (!validate_message(out))
+        return -1;
+
+    return 0;
+}
+
 //builders
 //sirven para garantizar que TODAS las respuestas tengan el formato correcto y que terminen en \n
 int build_register_ok(char *out, size_t n, const char *user, const char *ip) {

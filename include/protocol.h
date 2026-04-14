@@ -27,6 +27,12 @@ typedef struct { //ayuda a representar MSG|juan|hola
 
 int parse_message(const char *line, parsed_message_t *out);
 
+int protocol_parse(const char *line, parsed_message_t *out);
+
+//pasar a server.h
+//para que no de error necesito client_session_t en include/session.h
+//int handle_parsed_message(client_session_t *session, const parsed_message_t *msg);
+
 // builders
 int build_register_ok(char *out, size_t n, const char *user, const char *ip);
 int build_error(char *out, size_t n, const char *op, const char *code, const char *desc);
