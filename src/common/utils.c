@@ -1,4 +1,5 @@
 //src/common/utils.c
+//Funciones auxiliares
 
 #include "../../include/common.h"
 

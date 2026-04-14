@@ -1,9 +1,11 @@
 //src/common/validation.c
+//Valida que los mensajes sean correctos semánticamente
+//Separa validación del parsing para evitar lógica duplicada en handlers
 
 #include "../../include/common.h"
 #include "../../include/protocol.h"
 
-int is_valid_username(const char *u) { //evalúa si el username es válido
+int is_valid_username(const char *u) { //evalúa si el username es válido (solo letras, números y _, longitud válida)
     if (!u) return 0;
     int len = strlen(u);
     if (len == 0 || len > MAX_USER) return 0;
