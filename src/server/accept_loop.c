@@ -101,7 +101,7 @@ int server_start_accept_loop(void)
 
         session_slot = sessions_find_by_sockfd(client_sockfd);
         if (session_slot == NULL) {
-            close(client_sockfd);
+            sessions_remove_by_sockfd(client_sockfd);
             continue;
         }
 

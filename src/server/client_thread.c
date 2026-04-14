@@ -24,7 +24,7 @@ static void update_session_activity(int sockfd)
     pthread_mutex_unlock(&g_sessions_mutex);
 }
 
-int register_session_if_needed(client_session_t *session)
+static int register_session_if_needed(client_session_t *session)
 {
     if (session == NULL) {
         return -1;
