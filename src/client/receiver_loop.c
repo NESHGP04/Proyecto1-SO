@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-#include "../common/protocol.c"
+#include "../../include/protocol.h"
 #include "../../include/client.h"
 
 /* ═══════════════════════════════════════════════════════════════

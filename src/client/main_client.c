@@ -28,7 +28,7 @@
 #include <sys/socket.h>
 #include <errno.h>
 
-#include "../common/protocol.c"
+#include "../../include/protocol.h"
 #include "../../include/client.h"
 
 /* ── Forward declarations de funciones de otros archivos ─────────

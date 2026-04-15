@@ -32,7 +32,7 @@
 
 /* ── Configuración ──────────────────────────────────────────────── */
 #define MAX_STUB_CLIENTS  3
-#define BACKLOG           8
+/* BACKLOG ya definido en common.h como 16 */
 
 /* ── Colores para la consola del stub ──────────────────────────── */
 #define COL_RESET   "\033[0m"

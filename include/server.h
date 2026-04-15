@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "session.h"
+#include "parser.h"
 
 extern int g_server_sockfd;
 extern client_session_t g_sessions[MAX_CLIENTS];
@@ -31,6 +32,8 @@ int session_ip_exists(const char *ip);
 int session_mark_inactive_if_needed(client_session_t *session, time_t now,
                                     int timeout_seconds);
 
+int handle_parsed_message(client_session_t *session,
+                          const parsed_message_t *msg);
 void *client_thread_main(void *arg);
 void *inactivity_monitor_main(void *arg);
 

@@ -26,7 +26,6 @@
 #include <string.h>
 #include <time.h>
 
-#include "../common/protocol.c"
 #include "../../include/client.h"
 
 /* ═══════════════════════════════════════════════════════════════

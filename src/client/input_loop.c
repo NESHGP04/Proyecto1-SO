@@ -20,12 +20,11 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <sys/socket.h>
 
-#include "../common/protocol.c"
+#include "../../include/protocol.h"
 #include "../../include/client.h"
 
 /* ═══════════════════════════════════════════════════════════════
