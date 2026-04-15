@@ -20,6 +20,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <sys/socket.h>
@@ -96,7 +97,7 @@ void parse_command(const char *line, ParsedCommand *out) {
     /* Extraer la palabra del comando (hasta espacio o fin) */
     char cmd_word[32] = "";
     int  wi = 0;
-    while (*p && *p != ' ' && *p != '\t' && wi < 31)
+    while (*p && *p != ' ' && *p != '\t' && *p != '\n' && *p != '\r' && wi < 31)
         cmd_word[wi++] = *p++;
     cmd_word[wi] = '\0';
 
